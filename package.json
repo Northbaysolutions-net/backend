@@ -1,0 +1,30 @@
+{
+  "name": "ecommerce-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "db:makemigrations": "./node_modules/sequelize-auto-migrations/bin/makemigration.js"
+  },
+  "dependencies": {
+    "basic-auth": "^2.0.1",
+    "cookie-parser": "^1.4.4",
+    "debug": "^2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "^4.16.4",
+    "http-errors": "^1.6.3",
+    "jade": "^1.11.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "pg": "^7.18.2",
+    "pg-hstore": "^2.3.3",
+    "promise": "^8.1.0",
+    "sequelize": "^5.21.5",
+    "sequelize-auto-migrations": "github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba",
+    "sequelize-querystring": "^0.10.0",
+    "yarn": "^1.22.4"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^5.5.1"
+  }
+}
