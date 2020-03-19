@@ -10,4 +10,5 @@ router.get('/:id', async (req, res) => {
     res.send(sort(prods, req.query.sort));
 });
 
-module.exports = router;  
+module.exports = router;
+  

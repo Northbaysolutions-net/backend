@@ -4,7 +4,7 @@ const { allProducts, prodAttributes, sort, filter, productById, filteredProds } 
 const { checkToken } = require('../middlewares/authMiddleware');
 
 // all products with paginations, filtering and sorting
-router.get('/', checkToken, async (req, res) => {
+router.get('/',  async (req, res) => {
     let gender = [];
     let size = [];
     let color = [];
@@ -35,4 +35,5 @@ router.get('/:id', async (req, res) => {
 });
 
 
-module.exports = router;  
+module.exports = router; 
+ 

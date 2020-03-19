@@ -6,7 +6,6 @@ router.post('/', async (req, res) => {
     const user = await createUser(req.body);
     res.send(user);
 
-})
-
-
-module.exports = router; 
+});
+module.exports = router;
+ 

@@ -1,6 +1,5 @@
 const _ = require("lodash");
-const product_attributes = require('../models').product_attributes;
-const product = require('../models').product;
+const {product,product_attributes} = require('../models');
 
 const { Op } = require("sequelize");
 
