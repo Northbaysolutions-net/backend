@@ -15,54 +15,41 @@ class LoginController {
       return;
     }
     if (user.name && user.pass) {
-      await Customers.findOne({
-        where: { name: user.name }
-      })
-        .then(async customer => {
-          if (user.name === customer.name) {
-            await bcrypt
-              .compare(user.pass, customer.password)
-              .then(result => {
-                if (result) {
-                  let token = jwt.sign(
-                    { username: user.name },
-                    process.env.SECRET,
-                    {
-                      expiresIn: '24h' // expires in 24 hours
-                    }
-                  );
-                  res.json({
-                    success: true,
-                    message: 'Authentication successful!',
-                    token: token
-                  });
-                } else {
-                  res.set(
-                    'WWW-Authenticate',
-                    'Basic realm=Authorization Required'
-                  );
-                  res.status(401).json({
-                    message:
-                      'Failed to authorize user. Kindly check your credentials!!'
-                  });
-                  return;
-                }
-              })
-              .catch(error => {
-                console.log(error);
+      try {
+        const customer = await Customers.findOne({
+          where: { name: user.name }
+        });
+        if (user.name === customer.name) {
+          try {
+            const result = await bcrypt.compare(user.pass, customer.password);
+            if (!result) {
+              res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+              return res.status(401).json({
+                message:
+                  'Failed to authorize user. Kindly check your credentials!!'
               });
-          } else {
-            res.status(401).json({
+            }
+            let token = jwt.sign({ username: user.name }, process.env.SECRET, {
+              expiresIn: '24h' // expires in 24 hours
+            });
+            return res.json({
+              success: true,
+              message: 'Authentication successful!',
+              token: token
+            });
+          } catch (error) {
+            res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+            return res.status(401).json({
               message:
                 'Failed to authorize user. Kindly check your credentials!!'
             });
           }
-        })
-        .catch(error => {
-          res.status(401).json({
-            message: 'Failed to authorize user. Kindly check your credentials!!'
-          });
+        }
+      } catch (error) {
+        return res.status(400).json({
+          message: 'Authentication Failed! Please check the request'
         });
+      }
     } else {
       res.status(400).json({
         success: false,
