@@ -17,8 +17,7 @@ class ProductsController {
           }
         }
       };
-    }
-    else {
+    } else {
       options = {
         page: page,
         paginate: 10,
@@ -61,14 +60,20 @@ class ProductsController {
 
   static async getProductByCategory(req, res, next) {
     const id = req.params.id;
-    Product.findAll({
+    const { page, search } = req.query;
+    console.log(page);
+    let options = {
       include: [
         {
-          model: ProductCategory,
+          model: Product,
           required: true
         }
-      ]
-    })
+      ],
+      where: { category_id: id },
+      page: page,
+      paginate: 10
+    };
+    ProductCategory.paginate(options)
       .then(products => {
         res.json(products);
       })

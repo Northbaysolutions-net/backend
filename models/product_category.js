@@ -1,4 +1,6 @@
 'use strict';
+const sequelizePaginate = require('sequelize-paginate');
+
 module.exports = (sequelize, DataTypes) => {
   const ProductCategory = sequelize.define(
     'product_category',
@@ -23,7 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     { timestamps: false }
   );
   ProductCategory.associate = function(models) {
+    ProductCategory.belongsTo(models.product, { foreignKey: 'product_id' });
     // associations can be defined here
   };
+  sequelizePaginate.paginate(ProductCategory);
   return ProductCategory;
 };
