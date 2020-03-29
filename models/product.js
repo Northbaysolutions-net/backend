@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Product.associate = function(models) {
     Product.hasMany(models.product_category, { foreignKey: 'product_id' });
+    Product.hasMany(models.product_attribute, { foreignKey: 'product_id' });
     // associations can be defined here
   };
   sequelizePaginate.paginate(Product);

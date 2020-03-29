@@ -5,8 +5,7 @@
     "database": "FaheemDB",
     "host": "localhost",
     "port": 5433,
-    "dialect": "postgres",
-    "operatorsAliases": false
+    "dialect": "postgres"
   },
   "test": {
     "username": "node_training",

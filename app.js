@@ -6,6 +6,8 @@ const { signupRouter } = require('./routes/signup');
 const { loginRouter } = require('./routes/login');
 const { categoryRouter } = require('./routes/categories');
 const { configurationsRouter } = require('./routes/configurations');
+const { ordersRouter } = require('./routes/order');
+const { customersRouter } = require('./routes/customer');
 
 var app = express();
 
@@ -19,6 +21,8 @@ app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
 app.use('/category', categoryRouter);
 app.use('/configurations', configurationsRouter);
+app.use('/order', ordersRouter);
+app.use('/customer', customersRouter);
 
 const port = 3000;
 app.listen(port, () => {
