@@ -1,28 +1,31 @@
 const Product = require('../models').product;
 const ProductCategory = require('../models').product_category;
+const ProductAttribute = require('../models').product_attribute;
 const { Op } = require('sequelize');
 
 class ProductsController {
   static async getAllProducts(req, res, next) {
-    const { page, search } = req.query;
+    const { page, search, sort } = req.query;
+    if (!sort) {
+      sort = 'ASC';
+    }
     let options;
     if (search) {
       options = {
         page: page,
         paginate: 10,
-        order: [['name', 'ASC']],
         where: {
           name: {
-            [Op.like]: `${search}%`
+            [Op.iLike]: `%${search}%`
           }
-        }
+        },
+        order: [['price', sort]]
       };
-    }
-    else {
+    } else {
       options = {
         page: page,
         paginate: 10,
-        order: [['name', 'ASC']]
+        order: [['price', sort]]
       };
     }
     Product.paginate(options)
@@ -44,7 +47,6 @@ class ProductsController {
 
   static async getProductById(req, res, next) {
     const id = req.params.id;
-    console.log(id);
     Product.findOne({
       where: { product_id: id }
     })
@@ -61,14 +63,24 @@ class ProductsController {
 
   static async getProductByCategory(req, res, next) {
     const id = req.params.id;
-    Product.findAll({
+    let { page, search, sort } = req.query;
+    if (!sort) {
+      sort = 'ASC';
+    }
+    console.log(page);
+    let options = {
       include: [
         {
-          model: ProductCategory,
+          model: Product,
           required: true
         }
-      ]
-    })
+      ],
+      where: { category_id: id },
+      page: page,
+      paginate: 10,
+      order: [[Product, 'price', sort]]
+    };
+    ProductCategory.paginate(options)
       .then(products => {
         res.json(products);
       })

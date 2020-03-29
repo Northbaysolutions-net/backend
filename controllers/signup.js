@@ -21,7 +21,7 @@ class SignupController {
         });
         res.send({
           message: 'User Registered Successfully',
-          id: customer.customer_id,
+          customer_id: customer.customer_id,
           email: customer.email,
           token: token
         });

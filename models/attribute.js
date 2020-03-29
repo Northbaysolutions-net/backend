@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Attribute.associate = function(models) {
     // associations can be defined here
+    Attribute.hasMany(models.attribute_value, { foreignKey: 'attribute_id' });
   };
   return Attribute;
 };

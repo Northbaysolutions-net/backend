@@ -1,11 +1,11 @@
 {
   "development": {
-    "username": "node_training",
-    "password": "postgres",
+    "username": "postgres",
+    "password": "Destructor96",
     "database": "FaheemDB",
-    "host": "postgres-furqan.cdrfajzocnzf.us-east-1.rds.amazonaws.com",
-    "dialect": "postgres",
-    "operatorsAliases": false
+    "host": "localhost",
+    "port": 5433,
+    "dialect": "postgres"
   },
   "test": {
     "username": "node_training",

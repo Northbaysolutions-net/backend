@@ -33,6 +33,7 @@ class LoginController {
               expiresIn: '24h' // expires in 24 hours
             });
             return res.json({
+              customer_id: customer.customer_id,
               success: true,
               message: 'Authentication successful!',
               token: token
