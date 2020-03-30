@@ -9,6 +9,10 @@ const node_env = process.env.NODE_ENV;
 const config = {
     dev:{
         dialect: 'postgres',
+        username,
+        password,
+        database,
+        host,
 
         node_env: node_env,
         db:{

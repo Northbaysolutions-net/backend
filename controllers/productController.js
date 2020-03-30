@@ -6,8 +6,8 @@ require("dotenv").config();
 
 const allProducts = (req, res) => {
     return db.product
-      .findAndCountAll({
-        offset: req.query.offset || 0,
+      .findAll({
+        offset: (req.query.offset*10) || 0,
         limit: req.query.limit || 10,
         where: req.query.search
           ? {
@@ -19,11 +19,9 @@ const allProducts = (req, res) => {
         order: req.query.sort ? sqs.sort(req.query.sort) : []
       })
       .then(results => {
-        results.rows = results.rows.map(o => {
-          return o.get();
-        });
+       
         res.json({
-          result: results.rows
+          result: results
         });
       })
       .catch(err => {
@@ -56,22 +54,29 @@ const allProducts = (req, res) => {
         return id.product_id
       })
     }
-    if (req.query.filter2) {
+    if (req.query.filter[1]) {
       includeObj.where = {
-        attribute_value_id: parseInt(req.query.filter2)
+        attribute_value_id: parseInt(req.query.filter[1])
       };
-      if (req.query.filter3) {
+      if (req.query.filter[2]) {
         includeObj.include = {
           model: db.product_attribute,
           as: "parent",
           attributes: [],
-          where: { attribute_value_id: parseInt(req.query.filter3) }
+          where: { attribute_value_id: parseInt(req.query.filter[2]) }
         };
       }
     }
+
+    let whereArgument1={}
+    if (req.query.filter[0])
+    {
+      whereArgument1.attribute_value_id=parseInt(req.query.filter[0])
+    }
+  
     return db.product_attribute
       .findAll({
-        where: { attribute_value_id: parseInt(req.query.filter1) },
+        where: whereArgument1,
         include: includeObj,
   
         attributes: ["product_id"],
@@ -79,11 +84,21 @@ const allProducts = (req, res) => {
       })
       .then(async final => {
         flattenArray=JSON.parse(JSON.stringify(final))
-        final1=flattenArray.map((id)=>{
+       
+        final1= flattenArray.map((id)=>{
           return id.product_id
-        })
+        }
+        
+        )
+        if (!req.query.categoryFilter)
+        {
+          final2=final1
+        }
+
+
+
         let whereArgument = {
-          [Op.and]: [{product_id:final1}, {product_id:final2}]
+          [Op.and]: [{product_id:final1}, {product_id:final2}],
         };
         if (req.query.search) {
           whereArgument.name = {
@@ -91,13 +106,16 @@ const allProducts = (req, res) => {
           };
         }
         return db.product.findAll({
+          offset:  (req.query.offset*10) || 0,
+          limit: req.query.limit || 10,
           where: whereArgument,
-          order: req.query.sort ? sqs.sort(req.query.sort) : []
+          order: req.query.sort ? sqs.sort(req.query.sort) : [],
+          
         });
       })
       .then(result => {
         res.json({
-          results: result
+          result: result
         })
       })
       .catch(err => {

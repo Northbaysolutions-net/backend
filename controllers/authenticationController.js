@@ -8,10 +8,10 @@ let jwt = require("jsonwebtoken");
 
 
 const createUser = (req, res) => {
-    if (!req.body)
-    {
-        throw err
-    }
+
+    console.log(req.body)
+
+    
     let { userName, password } = JSON.parse(JSON.stringify(req.body));
   
     const userNameEncrypted = encrypt(userName);
@@ -47,6 +47,7 @@ const createUser = (req, res) => {
   };
 
   function login(req, res) {
+    console.log(req.body)
     
     if (req.body.name && req.body.pass) {
       return Customer.findOne({
@@ -55,6 +56,7 @@ const createUser = (req, res) => {
         }
       })
         .then(result => {
+          console.log(result);
           if (result) {
             let token = jwt.sign(
               { username: req.body.name },
@@ -67,7 +69,8 @@ const createUser = (req, res) => {
             res.json({
               success: true,
               message: "Authentication successful!",
-              token: token
+              token: token,
+              customer_id:result.customer_id
             });
           } else {
             throw err;

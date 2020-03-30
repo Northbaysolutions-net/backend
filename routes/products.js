@@ -2,15 +2,20 @@ const express = require("express");
 const router = express.Router();
 const {allProducts,filterProductId, getProductById}=require('../controllers/productController')
 
-router.get("/products", (req, res) => {
-  if (req.query.filter1) {
+router.get("/", (req, res) => {
+  if (!req.query.filter)
+  {
+    req.query.filter=new Array();
+  }
+
+  if (req.query.filter || req.query.categoryFilter) {
     filterProductId(req, res);
   } else {
     allProducts(req, res);
   }
 });
 
-router.get('/products/:id', (req,res)=>{
+router.get('/:id', (req,res)=>{
   getProductById(req,res)
 })
 

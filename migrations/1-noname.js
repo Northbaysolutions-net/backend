@@ -199,12 +199,12 @@ var migrationCommands = function(transaction) {
                         "allowNull": false
                     },
                     "price": {
-                        "type": Sequelize.DOUBLE PRECISION,
+                        "type": Sequelize.DOUBLE,
                         "field": "price",
                         "allowNull": false
                     },
                     "discounted_price": {
-                        "type": Sequelize.DOUBLE PRECISION,
+                        "type": Sequelize.DOUBLE,
                         "field": "discounted_price",
                         "defaultValue": "0.00",
                         "allowNull": false

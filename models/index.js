@@ -6,11 +6,14 @@ const config = require('../config/config');
 const db = {};
 
 
+
 const sequelize = new Sequelize(config.db.database, config.db.username, config.db.password, {
     dialect: 'postgres',
     host: config.db.host,
     logging: false,
+    storage:'./session.postgres'
 });
+
 
 fs
   .readdirSync(__dirname)
