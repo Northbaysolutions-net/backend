@@ -24,27 +24,32 @@ module.exports = (sequelize, DataTypes) => {
       discounted_price: {
         type: DataTypes.DOUBLE,
         allowNull: false,
-        defaultValue: "0.00"
+        defaultValue: 0.00
       },
       image: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: "NULL"
+        defaultValue: ''
       },
       image_2: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: "NULL"
+        defaultValue: ''
       },
       thumbnail: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: "NULL"
+        defaultValue: ''
       },
       display: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: "0"
+        defaultValue: 0
+      },
+      quantity : {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
       }
     },
     { timestamps: false, freezeTableName: true, tableName: "product" }
@@ -52,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
   product.associate = function(models) {
     product.hasMany(models.product_attribute, { foreignKey: "product_id" });
     product.hasMany(models.product_category, { foreignKey: "product_id" });
+    product.hasMany(models.product_order, { foreignKey: "product_id" });
   };
   return product;
 };
