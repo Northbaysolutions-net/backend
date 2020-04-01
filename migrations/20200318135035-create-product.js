@@ -23,27 +23,27 @@ module.exports = {
       discounted_price: {
         type: Sequelize.DOUBLE,
         allowNull: false,
-        defaultValue: "0.00"
+        defaultValue: 0.00
       },
       image: {
         type: Sequelize.STRING,
         allowNull: true,
-        defaultValue: "NULL"
+        defaultValue: ''
       },
       image_2: {
         type: Sequelize.STRING,
         allowNull: true,
-        defaultValue: "NULL"
+        defaultValue: ''
       },
       thumbnail: {
         type: Sequelize.STRING,
         allowNull: true,
-        defaultValue: "NULL"
+        defaultValue: ''
       },
       display: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: "0"
+        defaultValue: 0
       }
     });
   },

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       price: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false
       },
       placed_on: {
@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   order.associate = function(models) {
     order.belongsTo(models.customer, { foreignKey: "customer_id" });
+    order.hasMany(models.product_order, { foreignKey: "order_id" });
   };
   return order;
 };

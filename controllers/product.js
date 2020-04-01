@@ -9,13 +9,15 @@ exports.getProducts = async (req, res) => {
   let pageNo = 0;
 
   if (req.query) {
-    search = setQueryAttributes(req.query.size, search);
-    search = setQueryAttributes(req.query.color, search);
-    search = setQueryAttributes(req.query.gender, search);
 
-    categorySearch = setQueryAttributes(req.query.category, categorySearch);
+     let {size, color, gender, category} = req.query;
+    search = setQueryAttributes(size, search);
+    search = setQueryAttributes(color, search);
+    search = setQueryAttributes(gender, search);
 
-    if (req.query.searchparam) wordSearch = "%" + req.query.searchparam + "%";
+    categorySearch = setQueryAttributes(category, categorySearch);
+
+    if (req.query.search) wordSearch = "%" + req.query.search + "%";
 
     if (req.query.pageNo) pageNo = (req.query.pageNo - 1) * 10;
 
@@ -71,7 +73,7 @@ exports.getProducts = async (req, res) => {
   let where = {};
   if (result.length > 0) where.product_id = result;
   if (wordSearch.length > 0)
-    where.name = { [db.Sequelize.Op.like]: wordSearch };
+    where.name = { [db.Sequelize.Op.iLike]: wordSearch };
 
   models.product
     .findAndCountAll({
@@ -86,7 +88,12 @@ exports.getProducts = async (req, res) => {
     })
     .then(response => {
       response["total_pages"] = Math.floor(response.count/10)+1;
-      res.status(200).json(response);
+      let data = {
+        products : response.rows,
+        totalRecords : response.count ,
+        totalPages : response.total_pages
+      }
+      res.status(200).json(data);
     })
     .catch(error => {
       res.status(400).send(error);
@@ -97,7 +104,7 @@ exports.getProductsbyId = async (req, res) => {
   const id = req.params.id;
   models.product
     .findAll({
-      attributes: ["product_id", "name", "price", "thumbnail"],
+   
       where: { product_id: id },
       include: [
         {

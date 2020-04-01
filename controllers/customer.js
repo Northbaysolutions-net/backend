@@ -4,34 +4,90 @@ let config = require("../config/config");
 let crypto = require("../shared/encrypt_decrypt");
 
 exports.sign_up = (req, res) => {
-  let encrypt_password = crypto.encrypt(req.body.password);
+  let {name, password, email } = req.body
+  let encrypt_password = crypto.encrypt(password);
   models.customer
     .create({
-      name: req.body.name,
-      email: req.body.email,
-      password: encrypt_password,
-      credit_card: req.body.credit_card,
-      address_1: req.body.address_1,
-      address_2: req.body.address_2,
-      city: req.body.city,
-      region: req.body.region,
-      postal_code: req.body.postal_code,
-      country: req.body.country,
-      shipping_region_id: req.body.shipping_region_id,
-      day_phone: req.body.day_phone,
-      eve_phone: req.body.eve_phone,
-      mob_phone: req.body.mob_phone
+      name,
+      email,
+      password: encrypt_password
     })
-    .then(customers => {
-      if (customers) {
-        res.status(200).send("Inserted !");
+    .then(cus => {
+      if (cus) {
+        let token = jwt.sign(
+          { username: req.query.email },
+          config.secret_key,
+          {
+            expiresIn: "24h"
+          }
+        );
+        res.status(200).json({
+          success: true,
+          message: "Authentication successful!",
+          token: token,
+          customer_id : cus.customer_id,
+          customer : {
+            name: cus.name ,
+            email: cus.email,
+            address_1: cus.address_1,
+            address_2: cus.address_2,
+            city: cus.city,
+            region: cus.region,
+            postal_code: cus.postal_code,
+            country: cus.country,
+            shipping_region_id: cus.shipping_region_id,
+            day_phone: cus.day_phone,
+            eve_phone: cus.eve_phone,
+            mob_phone: cus.mob_phone
+          }
+        });
       } else {
-        res.status(400).send("Error in insert new record");
-      }
-    })
+        res.status(400).send("Customer doesnt exists");
+    }})
     .catch(error => {
       res.status(400).send(error);
     });
+};
+
+
+exports.customer_address = (req, res) => {
+
+  let {customer_id} = req.params
+  if (!(customer_id) || (customer_id < 1))
+    res.status(401).send("kindly pass valid customer_id");
+  else{
+
+    let {credit_card, address_1, address_2, city, region, postal_cod, country, shipping_region_id,
+    day_phone, eve_phone, mob_phone} = req.body
+  
+    models.customer
+      .update({
+        credit_card,
+        address_1,
+        address_2,
+        city,
+        region,
+        postal_code,
+        country,
+        shipping_region_id,
+        day_phone,
+        eve_phone,
+        mob_phone
+      },
+      { where: { customer_id : customer_id } })
+      .then(cus => {
+        if (cus) {
+          res.status(200).json({
+            customer_id : cus.customer_id
+          });
+        } else {
+          res.status(400).send("Customer doesnt exists");
+      }})
+      .catch(error => {
+        res.status(400).send(error);
+      });
+
+  }
 };
 
 exports.sign_in = (req, res) => {
@@ -54,7 +110,22 @@ exports.sign_in = (req, res) => {
           res.status(200).json({
             success: true,
             message: "Authentication successful!",
-            token: token
+            token: token,
+            customer_id : cus.customer_id, 
+            customer : {
+              name: cus.name ,
+              email: cus.email,
+              address_1: cus.address_1,
+              address_2: cus.address_2,
+              city: cus.city,
+              region: cus.region,
+              postal_code: cus.postal_code,
+              country: cus.country,
+              shipping_region_id: cus.shipping_region_id,
+              day_phone: cus.day_phone,
+              eve_phone: cus.eve_phone,
+              mob_phone: cus.mob_phone
+            }
           });
         } else {
           res.status(400).send("Customer doesnt exists");

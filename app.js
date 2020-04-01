@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 let middleware = require('./middlewares/index');
+let cors = require('cors');
+
 
 
 var indexRouter = require('./routes/index');
@@ -22,6 +24,7 @@ var app = express();
 //let handlers = new HandlerGenerator();
 
 
+app.use(cors())
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -41,7 +44,7 @@ app.use('/attribute_value',attributeValueRouter);
 app.use('/product_attribute',productAttributeRouter);
 app.use('/customer',customerRouter);
 app.use('/order',orderRouter);
-app.get('/',middleware.checkToken, indexRouter);
+app.post('/check_auth',middleware.checkToken, indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
