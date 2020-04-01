@@ -9,11 +9,13 @@ exports.getProducts = async (req, res) => {
   let pageNo = 0;
 
   if (req.query) {
-    search = setQueryAttributes(req.query.size, search);
-    search = setQueryAttributes(req.query.color, search);
-    search = setQueryAttributes(req.query.gender, search);
 
-    categorySearch = setQueryAttributes(req.query.category, categorySearch);
+     let {size, color, gender, category} = req.query;
+    search = setQueryAttributes(size, search);
+    search = setQueryAttributes(color, search);
+    search = setQueryAttributes(gender, search);
+
+    categorySearch = setQueryAttributes(category, categorySearch);
 
     if (req.query.search) wordSearch = "%" + req.query.search + "%";
 

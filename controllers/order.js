@@ -3,10 +3,13 @@ var models = require("../models");
 exports.insertOrder = (req, res) => {
   let order_id = 0;
 
+  let {customer_id, totalAmmount} = req.body;
+  let {address_1, address_2, city, region, postal_code, country} = req.body.customer_address;
+
   models.order
     .create({
-      customer_id: req.body.customer_id,
-      price: req.body.totalAmmount,
+      customer_id: customer_id,
+      price: totalAmmount,
       placed_on: new Date()
     })
     .then(response => {
@@ -26,14 +29,14 @@ exports.insertOrder = (req, res) => {
           if (responsePO) {
             models.customer
             .update({
-            address_1: req.body.customer_address.address_1,
-            address_2: req.body.customer_address.address_2,
-            city: req.body.customer_address.city,
-            region: req.body.customer_address.region,
-            postal_code: req.body.customer_address.postal_code,
-            country: req.body.customer_address.country
+            address_1,
+            address_2,
+            city,
+            region,
+            postal_code,
+            country
           },
-          { where: { customer_id : req.body.customer_id } })
+          { where: { customer_id } })
           .then(cus => {
             if (cus) {
               res.status(200).json({order_id : order_id});
