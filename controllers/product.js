@@ -51,6 +51,9 @@ exports.getProducts = async (req, res) => {
     result = productAttributeFiltered.map(a => {
       return a.product_id;
     });
+
+    if (result.length < 1)
+      res.status(200).json(result);;
   }
 
   if (categorySearch.length > 0) {
@@ -68,6 +71,11 @@ exports.getProducts = async (req, res) => {
     result = productCatregoryFitered.map(i => {
       return i.product_id;
     });
+
+    if (result.length < 1)
+    
+      res.status(200).json(result);
+
   }
 
   let where = {};
