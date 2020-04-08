@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "test@1234",
+    "database": "SadiaDB",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "postgres",
+    "password": "test@1234",
+    "database": "SadiaDB",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "postgres",
+    "password": "test@1234",
+    "database": "SadiaDB",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  }
+}
